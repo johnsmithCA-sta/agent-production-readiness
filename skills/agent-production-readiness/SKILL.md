@@ -4,7 +4,7 @@ slug: agent-production-readiness
 displayName: Agent 生产准备度评审（PRR）
 summary: 面向 AI Agent 的 Production Readiness Review（生产准备度评审）：八维评分 + 门槛扫描(M1–M4) + 双场景权重 + 证据等级，静态评审 Agent/Skill 的 Harness 运行时就绪度——只判"敢不敢上生产"，不评"写得好不好"。
 description: 面向 AI Agent 的 Production Readiness Review（PRR，生产准备度评审）。当用户要"评审一个 Agent 或 Skill 能不能上生产、生产准备度评审、上线评审、上线前把关、上线体检、PRR、go-live readiness、production readiness review、发布前评审、harness 评审、运行时可靠性评审"，或问"我的 Agent 敢不敢上线、这个技能生产就绪吗"时使用。评审对象是 Harness 运行时工程（上下文管理/工具权限/评估闭环/状态持久化/可观测/安全风控/成本治理/可维护性），输出生产准备度评分(S/A/B/C/D) + 风险清单 + 修复路径。范式锚定 Google SRE 的 PRR（分级门禁 A/B/C 与 SRE 惯例同构）。不适用于：SKILL.md 文档质量审查（另有 skill-reviewer 类技能）、运行时性能评测（需接 trace 的平台）、单 Agent 提示词调优、组织/周边系统的 agent 采用度评估（"agent readiness"的另一语义）。
-version: 0.2.0
+version: 0.2.1
 license: MIT
 author: johnsmithCA-sta
 homepage: https://github.com/johnsmithCA-sta/agent-production-readiness
@@ -74,7 +74,7 @@ last_updated: 2026-09-30
 **Step 3 定级**：计算总分（满分 100）；套用**关键维度底线规则**——**S 级要求 R1/R2/R3/R6 各 ≥ 该场景满分的 75%**（比例制，防偏科且双场景均可达，脚本自动核算）。可用脚本计算：
 
 ```bash
-python3 scripts/score.py --scores '{"R1":14,"R2":13,"R3":15,"R4":8,"R5":9,"R6":13,"R7":7,"R8":6}' --scenario default --gates '{"M1":false,"M2":false,"M3":false,"M4":false}'
+python3 scripts/score.py --scores '{"R1":14,"R2":13,"R3":15,"R4":8,"R5":9,"R6":13,"R7":7,"R8":6}' --scenario default --gates '{"M1":false,"M2":false,"M3":false,"M4":false,"M5":false,"M5":false}'
 ```
 
 **Step 4 出报告**：按 `references/03-report-template.md` 输出——结论/八维表/风险清单(🔴🟠🟡按上线后果排序)/修复路径/门禁建议；附**证据等级分布**行（A/B/C 占比，B/C 占比高本身是风险信号）。
