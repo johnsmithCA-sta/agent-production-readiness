@@ -1,5 +1,5 @@
 {
-  "benchmark_version": "0.4",
+  "benchmark_version": "0.5",
   "description": "合并基准：S0-ideal(新包新增) + 四样本校准原值(B1-B4, 分维比例底线不漂移) + 3 门槛否决 + 4 条防御回归。规则库变更后必跑，定级漂移即为回归信号。",
   "cases": [
     {
@@ -20,7 +20,8 @@
         "M1": false,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "total": 97,
@@ -46,7 +47,8 @@
         "M1": false,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "total": 85,
@@ -72,7 +74,8 @@
         "M1": false,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "total": 85,
@@ -98,7 +101,8 @@
         "M1": false,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "total": 79,
@@ -107,8 +111,8 @@
       "note": "A 级参照；典型缺口 R3 评估闭环薄"
     },
     {
-      "id": "B4-ima-copilot",
-      "name": "ima.copilot",
+      "id": "B4-platform-copilot",
+      "name": "平台托管型 Copilot（文档工程精致型）",
       "scenario": "default",
       "scores": {
         "R1": 12,
@@ -124,13 +128,14 @@
         "M1": false,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "total": 65,
         "grade": "B"
       },
-      "note": "B 级参照 + 差异化实证（文档优等生的运行时欠账）"
+      "note": "B 级参照 + 差异化实证（文档优等生的运行时欠账）；对象匿名（托管型平台 Agent，评分卡见 04-calibration）"
     },
     {
       "id": "D1-credential-leak",
@@ -150,7 +155,8 @@
         "M1": true,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "grade": "D"
@@ -175,7 +181,8 @@
         "M1": false,
         "M2": false,
         "M3": true,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "grade": "D"
@@ -200,7 +207,8 @@
         "M1": false,
         "M2": true,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "grade": "D"
@@ -225,7 +233,8 @@
         "M1": "false",
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "exit": 2
@@ -249,7 +258,8 @@
       "gates": {
         "M1": false,
         "M2": false,
-        "M3": false
+        "M3": false,
+        "M5": false
       },
       "expect": {
         "exit": 2
@@ -274,7 +284,8 @@
         "M1": false,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "expect": {
         "total": 99,
@@ -300,7 +311,8 @@
         "M1": false,
         "M2": false,
         "M3": false,
-        "M4": false
+        "M4": false,
+        "M5": false
       },
       "evidence": {
         "R3": "C"
@@ -310,6 +322,32 @@
         "grade": "A"
       },
       "note": "v0.1.1 P2 回归：R3 满分 16 但证据为 C 级 → clamp 到 floor(16*0.6)=9，总分 100→93；且 9 < 底线 12 → 由 S 压至 A。验证「无证据不许拿高分」可强制执行"
+    },
+    {
+      "id": "G5-m5-weaponized",
+      "name": "门槛样例：M5 待审内容武器化（SKILL.md 本体藏注入 payload）",
+      "scenario": "A",
+      "scores": {
+        "R1": 14,
+        "R2": 13,
+        "R3": 13,
+        "R4": 5,
+        "R5": 6,
+        "R6": 12,
+        "R7": 5,
+        "R8": 5
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false,
+        "M5": true
+      },
+      "expect": {
+        "grade": "D"
+      },
+      "note": "M5 一票否决：被审对象 SKILL.md 本体（可执行路径）携带注入 payload，对象自带注入向量"
     }
   ]
 }
