@@ -40,9 +40,9 @@
 | 接入成本 | 读文件 | 读文件（**零运行、零接入**） |
 | 动态评测平台（Langfuse 等） | 跑 trace，测真实表现 | 互补：本技能评"工程纪律是否就位"，通过后再值得接平台做动态验证 |
 
-**实证**：用本技能评审 ima.copilot（文档工程极精致的平台 Agent），结果只有 65 分 B 级——短板精确命中"无 eval suite、无沙箱、无成本统计"。同一把尺能测出文档优等生的运行时欠账，说明它量的确实不是文档。
+**实证**：用本技能评审某文档工程极精致的平台托管型 Agent（匿名口径），结果只有 65 分 B 级——短板精确命中"无 eval suite、无沙箱、无成本统计"。同一把尺能测出文档优等生的运行时欠账，说明它量的确实不是文档。
 
-> 详细的竞品逐一归类与三方对比，见知识库《Skill质检竞品深调与差异化做实》。
+> 竞品逐一归类与三方对比的完整档案由维护者留存，不随包发布；对外以本表与 `references/05-boundary.md` 的分工对照为准。
 
 ## 三、核心概念详解（SKILL.md 里没展开的部分）
 
@@ -109,12 +109,12 @@
 | ui-design-eval | 90 | A | 双轨复核（总分过 S 线，自审锚压级） |
 | knowledge-curation | 85 | A | 双轨复核（R1 压级） |
 | fair-competition-review | 78 | A | 双轨复核 |
-| ima.copilot | 65 | B | 差异化实证（文档优等生的运行时欠账，印象级） |
+| 平台托管型 Copilot（匿名） | 65 | B | 差异化实证（文档优等生的运行时欠账，印象级） |
 
 > v0.2.2 双轨制下 S 级暂时空缺——4 个核心对象全 A：均为个人维护、benchmark 自评未交叉验证，"可无人值守上生产"理应稀缺。S 线（85 + 75% 底线）保留观察，待真实 S 对象确认标定。
 
 
-以及本机 14 技能全量评审（详见知识库《本机技能生产就绪度评审报告》）。
+以及一批真实技能的全量评审（评分卡见 `references/06-cross-harness-eval.md`，平台托管型对象按匿名口径记录）。
 
 ## 四、安装
 
@@ -124,10 +124,10 @@
 
 ```bash
 # Claude Code
-unzip agent-production-readiness_v0.2.0.zip -d ~/.claude/skills/
+unzip agent-production-readiness_v0.2.1.zip -d ~/.claude/skills/
 
 # Cursor / 其他兼容 agentskills.io 的 harness
-unzip agent-production-readiness_v0.2.0.zip -d <你的 skills 目录>/
+unzip agent-production-readiness_v0.2.1.zip -d <你的 skills 目录>/
 
 # ima.copilot / SkillHub
 skillhub install agent-production-readiness
@@ -158,7 +158,7 @@ skillhub install agent-production-readiness
 python3 scripts/score.py \
   --scores '{"R1":14,"R2":13,"R3":15,"R4":8,"R5":9,"R6":13,"R7":7,"R8":6}' \
   --scenario default \
-  --gates '{"M1":false,"M2":false,"M3":false,"M4":false}'
+  --gates '{"M1":false,"M2":false,"M3":false,"M4":false,"M5":false,"M5":false}'
 # 输出：总分 85/100 → S 级 + 底线规则逐项检查
 ```
 
