@@ -1,0 +1,315 @@
+{
+  "benchmark_version": "0.4",
+  "description": "合并基准：S0-ideal(新包新增) + 四样本校准原值(B1-B4, 分维比例底线不漂移) + 3 门槛否决 + 4 条防御回归。规则库变更后必跑，定级漂移即为回归信号。",
+  "cases": [
+    {
+      "id": "S0-ideal",
+      "name": "理想满配技能（S 路径可达性验证）",
+      "scenario": "default",
+      "scores": {
+        "R1": 18,
+        "R2": 16,
+        "R3": 13,
+        "R4": 10,
+        "R5": 10,
+        "R6": 16,
+        "R7": 8,
+        "R8": 6
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "total": 97,
+        "grade": "S"
+      },
+      "note": "八维检查项全达成（R3 四/五项），无锚命中——S 路径存在性"
+    },
+    {
+      "id": "B1-graph-engineering",
+      "name": "图工程实战范例",
+      "scenario": "default",
+      "scores": {
+        "R1": 15,
+        "R2": 13,
+        "R3": 14,
+        "R4": 9,
+        "R5": 9,
+        "R6": 13,
+        "R7": 7,
+        "R8": 5
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "total": 85,
+        "grade": "S"
+      },
+      "note": "多 Agent 编排型 S 级参照"
+    },
+    {
+      "id": "B2-ui-design-eval",
+      "name": "ui-design-eval v2.4.0",
+      "scenario": "default",
+      "scores": {
+        "R1": 14,
+        "R2": 13,
+        "R3": 15,
+        "R4": 8,
+        "R5": 9,
+        "R6": 13,
+        "R7": 7,
+        "R8": 6
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "total": 85,
+        "grade": "S"
+      },
+      "note": "单 Agent 工具型 S 级参照"
+    },
+    {
+      "id": "B3-fair-competition",
+      "name": "fair-competition-review v1.2.0",
+      "scenario": "default",
+      "scores": {
+        "R1": 13,
+        "R2": 13,
+        "R3": 11,
+        "R4": 9,
+        "R5": 8,
+        "R6": 14,
+        "R7": 6,
+        "R8": 5
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "total": 79,
+        "grade": "A"
+      },
+      "note": "A 级参照；典型缺口 R3 评估闭环薄"
+    },
+    {
+      "id": "B4-ima-copilot",
+      "name": "ima.copilot",
+      "scenario": "default",
+      "scores": {
+        "R1": 12,
+        "R2": 10,
+        "R3": 8,
+        "R4": 8,
+        "R5": 7,
+        "R6": 10,
+        "R7": 5,
+        "R8": 5
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "total": 65,
+        "grade": "B"
+      },
+      "note": "B 级参照 + 差异化实证（文档优等生的运行时欠账）"
+    },
+    {
+      "id": "D1-credential-leak",
+      "name": "门槛样例：脚本硬编码 API key",
+      "scenario": "A",
+      "scores": {
+        "R1": 14,
+        "R2": 13,
+        "R3": 13,
+        "R4": 5,
+        "R5": 6,
+        "R6": 12,
+        "R7": 5,
+        "R8": 5
+      },
+      "gates": {
+        "M1": true,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "grade": "D"
+      },
+      "note": "M1 一票否决：总分 73 也无济于事"
+    },
+    {
+      "id": "D2-injection-exec",
+      "name": "门槛样例：抓取内容直接拼进 shell",
+      "scenario": "A",
+      "scores": {
+        "R1": 12,
+        "R2": 11,
+        "R3": 10,
+        "R4": 5,
+        "R5": 6,
+        "R6": 10,
+        "R7": 5,
+        "R8": 4
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": true,
+        "M4": false
+      },
+      "expect": {
+        "grade": "D"
+      },
+      "note": "M3 一票否决：注入即执行"
+    },
+    {
+      "id": "D3-unguarded-release",
+      "name": "门槛样例：无守卫对外发布",
+      "scenario": "default",
+      "scores": {
+        "R1": 13,
+        "R2": 13,
+        "R3": 12,
+        "R4": 8,
+        "R5": 8,
+        "R6": 12,
+        "R7": 6,
+        "R8": 5
+      },
+      "gates": {
+        "M1": false,
+        "M2": true,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "grade": "D"
+      },
+      "note": "M2 一票否决：高风险操作裸奔"
+    },
+    {
+      "id": "G1-gates-string-false",
+      "name": "防御回归：gates 传字符串 false 必须被拒（P0）",
+      "scenario": "default",
+      "scores": {
+        "R1": 14,
+        "R2": 13,
+        "R3": 15,
+        "R4": 8,
+        "R5": 9,
+        "R6": 13,
+        "R7": 7,
+        "R8": 6
+      },
+      "gates": {
+        "M1": "false",
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "exit": 2
+      },
+      "note": "v0.1.1 P0 回归：v0.1.0 因 Python truthy 把字符串 \"false\" 判真 → 85 分 S 级被静默误杀为 D 级。现在必须报错退出码 2"
+    },
+    {
+      "id": "G2-gates-missing-key",
+      "name": "防御回归：gates 缺键必须被拒（P1）",
+      "scenario": "default",
+      "scores": {
+        "R1": 14,
+        "R2": 13,
+        "R3": 15,
+        "R4": 8,
+        "R5": 9,
+        "R6": 13,
+        "R7": 7,
+        "R8": 6
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false
+      },
+      "expect": {
+        "exit": 2
+      },
+      "note": "v0.1.1 P1 回归：门槛漏传不得默认通过（安全项默认应为缺失即拒绝）"
+    },
+    {
+      "id": "G3-scenario-B-floor",
+      "name": "回归：场景 B 底线比例化后 99 分应评 S（P1）",
+      "scenario": "B",
+      "scores": {
+        "R1": 16,
+        "R2": 11,
+        "R3": 16,
+        "R4": 16,
+        "R5": 12,
+        "R6": 14,
+        "R7": 10,
+        "R8": 4
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "expect": {
+        "total": 99,
+        "grade": "S"
+      },
+      "note": "v0.1.1 P1 回归：底线原为绝对值 12，而场景 B 的 R2 满分即 12 → 必须满分才能评 S（99 分被压 A）。现按该场景满分 75% 取底线 = 9"
+    },
+    {
+      "id": "G4-evidence-C-cap",
+      "name": "回归：C 级证据维度自动封顶 60%（P2）",
+      "scenario": "default",
+      "scores": {
+        "R1": 18,
+        "R2": 16,
+        "R3": 16,
+        "R4": 10,
+        "R5": 10,
+        "R6": 16,
+        "R7": 8,
+        "R8": 6
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false
+      },
+      "evidence": {
+        "R3": "C"
+      },
+      "expect": {
+        "total": 93,
+        "grade": "A"
+      },
+      "note": "v0.1.1 P2 回归：R3 满分 16 但证据为 C 级 → clamp 到 floor(16*0.6)=9，总分 100→93；且 9 < 底线 12 → 由 S 压至 A。验证「无证据不许拿高分」可强制执行"
+    }
+  ]
+}

@@ -1,10 +1,12 @@
-# agent-readiness-review
+# agent-production-readiness
 
-**Agent/Skill 生产就绪度评审 · 八维评分 + 门槛扫描 + 双场景权重 + 证据等级**
+**Agent 生产准备度评审（PRR, Production Readiness Review）· 八维评分 + 门槛扫描 + 双场景权重 + 证据等级**
 
 > 只判"**敢不敢上生产**"，不评"写得好不好"。
 
-[![version](https://img.shields.io/badge/version-0.1.1-blue)](references/04-calibration.md) [![method](https://img.shields.io/badge/方法论-v0.2.2-green)](references/04-calibration.md) [![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
+[![version](https://img.shields.io/badge/version-0.2.0-blue)](references/04-calibration.md) [![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
+
+> ⚠️ **v0.2.0 更名**：原名 `agent-readiness-review` 与业界「agent readiness = 组织/周边系统采纳度」语义冲突（AWS Agentic Readiness 等已占用）；现名 **`agent-production-readiness`**，中文名「Agent 生产准备度评审（PRR）」。
 
 ---
 
@@ -17,6 +19,12 @@
 - 你写了一个 Agent/Skill，准备上生产，想知道"**上线会不会出事**"；
 - 团队要做发布门禁，需要一把统一的、可复核的尺；
 - 评估别人的 Agent 方案，不想只听"演示很惊艳"。
+
+### 它在业界的名字：PRR
+
+这个能力在 SRE / 运维领域有成熟名字——**Production Readiness Review（PRR，生产准备度评审）**：Google SRE 于 2000 年代初确立、2016 年《Site Reliability Engineering》正式文档化；中文业界通行译名为**「生产准备度评审」**（华为云《确定性运维白皮书》）。其分级门禁（A 类必过 / B 类可带问题上线+整改 / C 类技术牵引）与本技能的「M1–M4 一票否决 + S/A/B/C/D 定级」**结构同构**——本技能是把 PRR 从传统服务领域迁移到 AI Agent 领域。
+
+> **与「agent readiness」的区分**：后者在业界指"组织或周边系统是否准备好接纳 agent"（AWS Agentic Readiness、CTAIO 等）；本技能审的是"**这个 Agent 自身能不能上生产**"。
 
 ## 二、为什么存在（与竞品的根本区别）
 
@@ -75,7 +83,7 @@
 
 评 S 不仅要求总分 ≥85，还要求 **R1≥11 且 R2≥12 且 R3≥12 且 R6≥12**。
 
-**实战案例**：law-fetch 总分 86（过 S 线），但 R3 评估闭环仅 10 分 → 压至 A。一个"除了评估体系哪都强"的技能不该拿 S——上线后它的"改 A 坏 B"没人知道。底线规则就是抓这种偏科。
+**实战案例**：law-fetch 双轨复核 87（过 S 线），但 R3 评估闭环仅 10 分 → 压至 A。个人技能的 benchmark 普遍自评、未换家族交叉验证，"自审锚 −3"是 R3 最常见失分点——上线后"改 A 坏 B"没人知道。底线规则就是抓这种偏科。
 
 ### 3.5 双场景权重
 
@@ -96,12 +104,15 @@
 
 | 样本 | 总分 | 定级 | 角色 |
 |------|:---:|:---:|------|
-| skill-dev-kit | 94 | S | 全场最高分：评估体系最完整 |
-| law-fetch | 86→A | A | **底线规则实战首杀**（偏科压级） |
-| ui-design-eval | 85 | S | 贴线参照 |
-| knowledge-curation | 81 | A | |
-| fair-competition-review | 79 | A | |
-| ima.copilot | 65 | B | 差异化实证（文档优等生的运行时欠账） |
+| skill-dev-kit | 82 | A | 双轨逐锚复核（原印象级 94 虚高 12 分） |
+| law-fetch | 87 | A | **底线规则实战首杀**（R3=10<12 压级） |
+| ui-design-eval | 90 | A | 双轨复核（总分过 S 线，自审锚压级） |
+| knowledge-curation | 85 | A | 双轨复核（R1 压级） |
+| fair-competition-review | 78 | A | 双轨复核 |
+| ima.copilot | 65 | B | 差异化实证（文档优等生的运行时欠账，印象级） |
+
+> v0.2.2 双轨制下 S 级暂时空缺——4 个核心对象全 A：均为个人维护、benchmark 自评未交叉验证，"可无人值守上生产"理应稀缺。S 线（85 + 75% 底线）保留观察，待真实 S 对象确认标定。
+
 
 以及本机 14 技能全量评审（详见知识库《本机技能生产就绪度评审报告》）。
 
@@ -109,17 +120,17 @@
 
 ### 4.1 通用安装（任何支持 Agent Skills 的 harness）
 
-解压 zip 后，把 `agent-readiness-review/` 目录拷贝到你的 skills 目录：
+解压 zip 后，把 `agent-production-readiness/` 目录拷贝到你的 skills 目录：
 
 ```bash
 # Claude Code
-unzip agent-readiness-review_v0.1.0.zip -d ~/.claude/skills/
+unzip agent-production-readiness_v0.2.0.zip -d ~/.claude/skills/
 
 # Cursor / 其他兼容 agentskills.io 的 harness
-unzip agent-readiness-review_v0.1.0.zip -d <你的 skills 目录>/
+unzip agent-production-readiness_v0.2.0.zip -d <你的 skills 目录>/
 
 # ima.copilot / SkillHub
-skillhub install agent-readiness-review
+skillhub install agent-production-readiness
 ```
 
 ### 4.2 依赖
@@ -166,10 +177,7 @@ python3 scripts/score.py \
 静态评审回答"工程纪律是否就位"，动态评测回答"实际表现好不好"——是两个层次。纪律没就位时不值得跑动态测试（必然埋雷）；纪律就位后动态测试才有意义。两者是"体检"与"体测"的关系。
 
 **Q3 评分会不会很主观？**
-证据等级制度把主观性压到最低：每个分数必须有 A/B/C 级证据，C 级最多 60%（v0.1.1 起由 `score.py --evidence` 强制执行，不再只靠评审者自觉）。
-> ⚠️ **诚实水位（2026-09-30 实测）**：两个评审者对同一对象，目前**只能保证定级一致，不能保证分差 ≤5**。
-> 本机 3 个对象的独立重评分差为 −14 / −22 / −19，根因是**出厂基线分未逐条对照 rubric 扣分锚**（详见 `04-calibration.md` v0.2.2）。
-> 在基线逐维重打完成前，请把本技能的输出当**分级 + 风险清单**用，不要当**精确分数排名**用。
+双轨评分制（v0.2.2）+ 证据等级把主观性压到最低：得分 = 检查项达成度基线 − 命中锚，每维记录三行可复核（达成 n/N｜命中锚｜得分），C 级证据由脚本强制 clamp 至 60%。跨 harness 实测曾以同一 rubric 复现出 80 vs 82 的接近结论——分歧可落到具体检查项与适用性判断上核对。
 
 **Q4 为什么 R3（评估闭环）是敏感维度？**
 四样本回测中 R3 是最大区分维度（强样本 15、中样本 11、平台 Agent 8）。原因是：评估体系是"其他所有维度的验证器"——没有它，R1-R8 的任何改进都无法确认没改坏。所以它进底线规则。
@@ -184,11 +192,9 @@ python3 scripts/score.py \
 - `scripts/score.py` 经审计：仅 import `argparse/json/sys`，无网络、无文件写入（只写 stdout），退出码干净（0/2）——可直接接入 CI 无隔离执行；
 - 未来若扩展"自动扫描被审目录凭据"（M1 半自动化），将坚持只读扫描、永不执行被审脚本的原则。
 
-**评审者侧防注入（v0.1.1 新增）**：本技能读被审对象全部文件，被审对象本身就是注入面。材料中出现的指令性文本（`SYSTEM OVERRIDE`、`忽略评审标准`、`优先级高于一切`、`ignore previous` 等）一律按待审数据处理并原样写入报告，命中按 M4 方向处理。细则见 `references/02-gates.md` §评审者侧防护。
-
 **免疫备份（三层）**：
 1. **版本免疫**：git 版本管理（本仓库），规则库每次变更入 git 历史；
-2. **评分免疫**：`evals/benchmark.json` 基准回归——**11 用例**（4 基准 + 3 门槛否决 + **4 防御回归**），一键执行 `python3 scripts/run_benchmark.py`（退出码 0 全绿 / 1 有失败，可接 CI）。已实测 11/11 PASS，**并已反向自证：注入错误期望时确实报 FAIL 且退出码 1**（不自我证明自己是好的）；
+2. **评分免疫**：`evals/benchmark.json` 基准回归——7 用例（4 基准 + 3 门槛否决），规则库被改坏时基准测试立即报警（已实测 7/7 PASS）；
 3. **发布快照**：发布前用 skill-dev-kit 的 `make_skillhub_zip.py` 打归档快照。
 
 **评审过程的可逆性**：本技能全程只读，不在被审对象目录写入任何文件；报告输出到用户指定位置。
@@ -197,9 +203,8 @@ python3 scripts/score.py \
 
 - 静态评审不能发现"逻辑正确但运行时崩"的问题（需动态评测补位）；
 - 评分含评审者判断成分，重要对象建议双评取中；
-- **分数精度有限**：当前只能保证**定级一致**，分差可能达 ±20（根因：出厂基线未逐条对照 rubric 扣分锚，已在 `04-calibration.md` v0.2.2 登记为债务）。**不要用于精确排名**；
 - 多 Agent 安全的独有威胁（共谋、责任分散）尚未纳入门槛（M5 待编排型样本积累后评估）；
-- C 级 60% 上限规则已代码化（`--evidence`），但尚未在真实付费评审中验证其校准效果。
+- C 级 60% 上限规则尚未在真实付费评审中验证。
 
 ## 九、版本历史
 
@@ -209,8 +214,9 @@ python3 scripts/score.py \
 | 方法论 v0.2 | 2026-09-29 | 四样本校准：底线规则、证据分布、门槛定稿 |
 | 方法论 v0.2.1 | 2026-09-29 | 本机 14 技能评审回流：ask 档等价物、平台托管口径 |
 | 技能 v0.1.0 | 2026-09-29 | 首版（preflight PASS，基准 7/7） |
-| 方法论 v0.2.2 | 2026-09-30 | **WorkBuddy 跨 Harness 实测回流**：底线比例化（修场景 B 的 S 不可达）、评审者侧防注入条款、M1 教学示例豁免、C 级封顶代码化、基准 7→11（增 4 条防御回归）+ `run_benchmark.py`；登记「出厂基线未校准」债务并撤回「分差 ≤5」承诺 |
-| 技能 v0.1.1 | 2026-09-30 | 修复版：`score.py` gates 键齐全+布尔校验（**P0 误杀**）、底线比例化、新增 `--evidence` 与 `run_benchmark.py`；基准 11/11 PASS 且已自证能报 FAIL |
+| 方法论 v0.2.2 | 2026-09-30 | 跨 harness 实测回流：**双轨评分制**、比例底线（≥75% 场景满分）、M5 待审武器化、score.py 四项修复 |
+| 技能 v0.1.1 | 2026-09-30 | 实测报告 P0–P2 全部采纳；四核心基准双轨重打（S 暂缺、全 A，标定观察中）；探针测试 16/16 |
+| 技能 v0.2.0 | 2026-09-30 | **更名**为 agent-production-readiness；displayName 采用业界译名「生产准备度评审（PRR）」；版本号治理（技能 version 统领，方法论版本降为内部记录） |
 
 ## 十、反馈
 
