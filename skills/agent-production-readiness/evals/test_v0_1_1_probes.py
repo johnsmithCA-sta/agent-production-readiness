@@ -4,7 +4,7 @@ import json
 import subprocess
 import sys
 
-G = '{"M1":false,"M2":false,"M3":false,"M4":false}'
+G = '{"M1":false,"M2":false,"M3":false,"M4":false,"M5":false}'
 S85 = {"R1": 15, "R2": 13, "R3": 14, "R4": 9, "R5": 9, "R6": 13, "R7": 7, "R8": 5}
 
 
@@ -23,7 +23,7 @@ def main():
         failed += (not ok)
 
     # ── P0-1 gates 严格校验 ──
-    rc, out = run(["--scores", json.dumps(S85), "--gates", '{"M1":false,"M2":"false","M3":false,"M4":false}'])
+    rc, out = run(["--scores", json.dumps(S85), "--gates", '{"M1":false,"M2":"false","M3":false,"M4":false,"M5":false}'])
     check("P0-1a 字符串false被拒绝", rc == 2 and "布尔" in out, out.splitlines()[0][:80])
     rc, out = run(["--scores", json.dumps(S85), "--gates", '{"M1":false}'])
     check("P0-1b 缺键被拒绝", rc == 2 and "缺键" in out, out.splitlines()[0][:80])
@@ -69,6 +69,13 @@ def main():
         if "total" in c["expect"] and c["scenario"] == "default":
             ok = ok and o["total"] == c["expect"]["total"]
         check(f"基准 {c['id']}", ok, f"{o['total']}/{o['grade']} expect {c['expect']}")
+
+    # ── M5 待审内容武器化 ──
+    rc, out = run(["--scores", json.dumps(S85), "--gates", '{"M1":false,"M2":false,"M3":false,"M4":false,"M5":true}', "--json"])
+    o = json.loads(out) if rc == 0 else {}
+    check("M5 命中判D", rc == 0 and o.get("grade") == "D" and "M5" in ",".join(o.get("gates_hit", [])), f"{o.get('grade')} gates_hit={o.get('gates_hit')}")
+    rc, out = run(["--scores", json.dumps(S85), "--gates", '{"M1":false,"M2":false,"M3":false,"M4":false}'])
+    check("gates缺M5被拒", rc == 2, out.splitlines()[0][:70])
 
     # ── 回归：错误路径 ──
     rc, _ = run(["--scores", json.dumps({k: 1 for k in S85 if k != "R8"})])
