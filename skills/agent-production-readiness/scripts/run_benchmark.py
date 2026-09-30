@@ -3,6 +3,7 @@
 
 一键重跑 evals/benchmark.json 全部用例，比对「总分 / 定级 / 退出码」三类期望。
 规则库（rubric / gates / score.py）每次变更后必跑——定级漂移或防御失效立即报警。
+校准表复算入口见 `scripts/recompute_calibration.py`。
 
 用法：
   python3 scripts/run_benchmark.py            # 跑全部用例
@@ -47,7 +48,7 @@ def run_case(case):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="agent-readiness-review 基准回归")
+    ap = argparse.ArgumentParser(description="agent-production-readiness 基准回归 v0.2.3")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 

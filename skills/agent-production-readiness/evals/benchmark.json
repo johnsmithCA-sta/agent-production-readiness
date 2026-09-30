@@ -1,6 +1,6 @@
 {
-  "benchmark_version": "0.5",
-  "description": "合并基准：S0-ideal(新包新增) + 四样本校准原值(B1-B4, 分维比例底线不漂移) + 3 门槛否决 + 4 条防御回归。规则库变更后必跑，定级漂移即为回归信号。",
+  "benchmark_version": "0.6",
+  "description": "合并基准（14 例）：S0-ideal 理想满配（S 路径可达性）+ 四样本校准原值(B1-B4, 分维比例底线不漂移) + 3 门槛否决(D1-D3) + 1 M5 门槛样例(G5) + 5 条防御回归(G1-G4、G6)。规则库变更后必跑，定级漂移或防御失效即为回归信号。",
   "cases": [
     {
       "id": "S0-ideal",
@@ -348,6 +348,33 @@
         "grade": "D"
       },
       "note": "M5 一票否决：被审对象 SKILL.md 本体（可执行路径）携带注入 payload，对象自带注入向量"
+    },
+    {
+      "id": "G6-gates-unknown-key",
+      "name": "防御回归：gates 含未知键必须被拒（P0，v0.2.2）",
+      "scenario": "default",
+      "scores": {
+        "R1": 14,
+        "R2": 13,
+        "R3": 15,
+        "R4": 8,
+        "R5": 9,
+        "R6": 13,
+        "R7": 7,
+        "R8": 6
+      },
+      "gates": {
+        "M1": false,
+        "M2": false,
+        "M3": false,
+        "M4": false,
+        "M5": false,
+        "M6": true
+      },
+      "expect": {
+        "exit": 2
+      },
+      "note": "v0.2.2 P0 回归：未知键必须被拒（P0，v0.2.2）——键名写错（如 M5 误写为 M6）时原被 gates.get() 静默丢弃，100 分被误判为 S 级；现在必须报错退出码 2"
     }
   ]
 }

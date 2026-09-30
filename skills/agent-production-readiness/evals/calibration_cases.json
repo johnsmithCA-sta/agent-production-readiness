@@ -1,0 +1,100 @@
+{
+  "schema": "agent-production-readiness/calibration_cases/v1",
+  "methodology_version": "v0.2.2",
+  "generated": "2026-09-30",
+  "source": "references/04-calibration.md §四核心基准 · 双轨逐锚复核表（v0.2.2，2026-09-30）",
+  "scenario": "default",
+  "scoring_rule": "baseline = round(max × achieved / achievable)；score = baseline + Σ anchors.delta；achievable = 适用检查项数（不适用项已剔除并在 excluded 列明）",
+  "corrected_in_v0_2_2": [
+    "skill-dev-kit/R2：score 13 → 16，总分 82 → 85（原 −3 锚前提不成立 + 沙箱项已作不适用剔除 ⇒ 扣分无依据）。定级仍 A（R1=9<11、R3=10<12 双压级）。除此以外全部数值照抄 04-calibration.md 现表。"
+  ],
+  "summary": [
+    "原基线普遍虚高 1–9 分（P1-2 成立）；定级层面 law-fetch / knowledge-curation / fair-competition-review 维持 A，skill-dev-kit 与 ui-design-eval 由 S 降 A——降级共同原因是 R3「自审自验」锚（个人技能的 benchmark 都是自评，未换家族交叉验证）。",
+    "skill-dev-kit R2 于 v0.2.2 更正：13 → 16，总分 82 → 85（该对象有文件写与平台网络写，非「均为本地只读」，原 −3 锚前提不成立；且沙箱项已作不适用剔除 ⇒ 扣分无依据）。",
+    "S 阈值可达性已由 evals/benchmark.json 的合成样本验证（97 / 85 / 85 三例）；双轨制下真实对象仍全 A（个人维护、benchmark 自评未交叉验证），尚缺真实 S 对象标定。",
+    "图工程实战范例、平台托管型 Agent 家族（匿名）：维持印象级评分（未逐锚复核），在 benchmark 中已标注；点名版本仅存内部评审档案，不随包发布。",
+    "本表为 v0.2.2 前记录格式，未逐维标注证据级；历史样本证据级回填需重跑评审，列为待办（不猜测回填）。"
+  ],
+  "cases": [
+    {
+      "skill": "skill-dev-kit",
+      "review_claim": "双轨复核 85 · A（原基线 94 S，虚高 9 分；v0.2.2 更正 R2）",
+      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "expect": { "total": 85, "grade": "A", "floor_fail": ["R1", "R3"] },
+      "dims": {
+        "R1": { "max": 18, "achievable": 4, "achieved": 2, "anchors": [], "excluded": ["子任务隔离"], "score": 9, "basis": "压缩/卸载无声明；子任务隔离不适用剔除" },
+        "R2": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["沙箱"], "score": 16, "basis": "[不可逆]+确认=ask 等价；资金路径降级表", "corrected": "v0.2.2：原记 13 的 −3 锚前提不成立（该对象有文件写与平台网络写，非'均为本地只读'），且沙箱项已作不适用剔除 ⇒ 扣分无依据" },
+        "R3": { "max": 16, "achievable": 5, "achieved": 4, "anchors": [{ "label": "自审", "delta": -3 }], "excluded": [], "score": 10, "basis": "evals/触发评估/错误路径/回流齐；换家族未达成" },
+        "R4": { "max": 10, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["并行"], "score": 10, "basis": "跨会话接续/落盘纪律/并行不适用剔除×1" },
+        "R5": { "max": 10, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 10, "basis": "" },
+        "R6": { "max": 16, "achievable": 3, "achieved": 3, "anchors": [], "excluded": ["外部内容", "注入场景"], "score": 16, "basis": "外部内容/注入场景不适用剔除×2" },
+        "R7": { "max": 8, "achievable": 2, "achieved": 2, "anchors": [], "excluded": ["多 Agent"], "score": 8, "basis": "多 Agent 不适用剔除" },
+        "R8": { "max": 6, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 6, "basis": "" }
+      }
+    },
+    {
+      "skill": "law-fetch",
+      "review_claim": "双轨复核 87 · A（原基线 86 A，定级不变）",
+      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "expect": { "total": 87, "grade": "A", "floor_fail": ["R3"] },
+      "dims": {
+        "R1": { "max": 18, "achievable": 4, "achieved": 3, "anchors": [], "excluded": [], "score": 14, "basis": "工具输出落盘=卸载达成；压缩无" },
+        "R2": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["资金"], "score": 16, "basis": "法律级权限分级；资金不适用剔除" },
+        "R3": { "max": 16, "achievable": 5, "achieved": 3, "anchors": [], "excluded": [], "score": 10, "basis": "无 evals/触发评估；降级链=错误路径 B；踩坑表=回流 B；三源定谳=外部验证 A" },
+        "R4": { "max": 10, "achievable": 2, "achieved": 2, "anchors": [], "excluded": ["单点写入", "并行"], "score": 10, "basis": "单点写入/并行不适用剔除×2" },
+        "R5": { "max": 10, "achievable": 3, "achieved": 2, "anchors": [], "excluded": [], "score": 7, "basis": "成本统计未达成" },
+        "R6": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["脱敏"], "score": 16, "basis": "脱敏不适用剔除" },
+        "R7": { "max": 8, "achievable": 2, "achieved": 2, "anchors": [], "excluded": [], "score": 8, "basis": "" },
+        "R8": { "max": 6, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 6, "basis": "" }
+      }
+    },
+    {
+      "skill": "ui-design-eval",
+      "review_claim": "双轨复核 90 · A（原基线 85 S）",
+      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "expect": { "total": 90, "grade": "A", "floor_fail": ["R3"] },
+      "dims": {
+        "R1": { "max": 18, "achievable": 4, "achieved": 3, "anchors": [], "excluded": [], "score": 14, "basis": "素材落盘=卸载；压缩无声明" },
+        "R2": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": [], "score": 16, "basis": "全本地只读；playwright 本地执行" },
+        "R3": { "max": 16, "achievable": 5, "achieved": 4, "anchors": [{ "label": "自审", "delta": -3 }], "excluded": [], "score": 10, "basis": "benchmark/regression/ci/错误路径拦截；换家族未达成" },
+        "R4": { "max": 10, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 10, "basis": "" },
+        "R5": { "max": 10, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 10, "basis": "" },
+        "R6": { "max": 16, "achievable": 5, "achieved": 5, "anchors": [], "excluded": [], "score": 16, "basis": "反爬识别=外部内容校验；门槛锁总评=决策执行分离" },
+        "R7": { "max": 8, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 8, "basis": "读图次数压缩=多 Agent 成本对策" },
+        "R8": { "max": 6, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 6, "basis": "" }
+      }
+    },
+    {
+      "skill": "knowledge-curation",
+      "review_claim": "双轨复核 85 · A（原基线 81 A）",
+      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "expect": { "total": 85, "grade": "A", "floor_fail": ["R1"] },
+      "dims": {
+        "R1": { "max": 18, "achievable": 4, "achieved": 2, "anchors": [], "excluded": [], "score": 9, "basis": "保守方向=预算意识 B；压缩/卸载无" },
+        "R2": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": [], "score": 16, "basis": "判断层零写操作；Q1 拦截=守卫" },
+        "R3": { "max": 16, "achievable": 5, "achieved": 4, "anchors": [], "excluded": [], "score": 13, "basis": "13 用例/触发词清单/敏感拦截=错误路径/迭代重跑=回流 B；换家族未达成" },
+        "R4": { "max": 10, "achievable": 2, "achieved": 2, "anchors": [], "excluded": ["checkpoint", "并行"], "score": 10, "basis": "checkpoint/并行不适用剔除×2" },
+        "R5": { "max": 10, "achievable": 3, "achieved": 2, "anchors": [], "excluded": [], "score": 7, "basis": "成本统计未达成" },
+        "R6": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["决策执行分离"], "score": 16, "basis": "决策执行分离不适用剔除" },
+        "R7": { "max": 8, "achievable": 2, "achieved": 2, "anchors": [], "excluded": [], "score": 8, "basis": "" },
+        "R8": { "max": 6, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 6, "basis": "" }
+      }
+    },
+    {
+      "skill": "fair-competition-review",
+      "review_claim": "双轨复核 78 · A（原基线 79 A）；原表以单行式记录（非逐维表格）",
+      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "expect": { "total": 78, "grade": "A", "floor_fail": ["R1", "R3"] },
+      "dims": {
+        "R1": { "max": 18, "achievable": 4, "achieved": 2, "anchors": [], "excluded": [], "score": 9, "basis": "1/4→保守方向算预算意识则 2/4" },
+        "R2": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": [], "score": 16, "basis": "4/4" },
+        "R3": { "max": 16, "achievable": 5, "achieved": 4, "anchors": [{ "label": "自审", "delta": -3 }], "excluded": [], "score": 10, "basis": "4/5，自审 −3" },
+        "R4": { "max": 10, "achievable": 2, "achieved": 2, "anchors": [], "excluded": [], "score": 10, "basis": "2/2" },
+        "R5": { "max": 10, "achievable": 3, "achieved": 2, "anchors": [], "excluded": [], "score": 7, "basis": "2/3" },
+        "R6": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": [], "score": 16, "basis": "4/4" },
+        "R7": { "max": 8, "achievable": 2, "achieved": 1, "anchors": [], "excluded": [], "score": 4, "basis": "1/2" },
+        "R8": { "max": 6, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 6, "basis": "3/3" }
+      }
+    }
+  ]
+}

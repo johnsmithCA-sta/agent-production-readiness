@@ -6,12 +6,29 @@
       --gates '{"M1":false,...}' [--evidence '{"R1":"A",...}'] [--json]
 
 v0.1.1 修复（依据跨 harness 实测报告）：
-  - P0-1 gates 严格校验：提供时必须四键齐全、值必须布尔；不明确即拒绝（退出码 2）。
-  - P1-1 关键维度底线改比例制：≥ ceil(75% × 该场景维度满分)——双场景 S 级均可达。
+  - P0-1 gates 严格校验：提供时必须五键齐全、值必须布尔；不明确即拒绝（退出码 2）。
+  - P1-1 关键维度底线改比例制：≥ ceil(阈值 × 该场景维度满分)——双场景 S 级均可达（v0.2.2 起
+    各维阈值见 FLOOR_RATIO：R1=0.60、R2/R3/R6=0.75；本条原「统一 75%」措辞已被取代）。
   - P2-2 --evidence：C 级证据自动 clamp 至该维满分 60%。
   - P2-3 越界报错附带当前场景各维上限表。
 
-退出码：0 正常；2 输入错误（缺键/类型错/越界/未知维度）。
+v0.2.2 修复（依据 2026-09-30 独立联合评估 P0-1）：
+  - gates 校验由「失败开放」改为「失败关闭」，四类全覆盖，任一命中即拒绝（退出码 2）：
+      ① 缺键（missing）；② 未知键（unknown，如误传 M9/M6）；③ 重复键（JSON 同名键取末值）；
+      ④ 非布尔类型（bad）。
+  - 「失败开放」的实际危害（已实测复现）：未知键被 gates.get() 静默丢弃 → 100 分误判 S；
+    `"M5":true,"M5":false` 重复键取末值 → S 级且 gates_hit=[]（一票否决被吞掉）。
+  - gates 校验通过后直接返回校验后的键值，不再以 get(g, False) 兜底。
+
+v0.2.3 修复（依据 2026-09-30 DSH 复审回执）：
+  - 修 --help 崩溃（既有债，v0.2.1 同崩）：--evidence 的 help 文本含裸 `%`，argparse 的
+    `_expand_help` 走 `% params` 格式化时抛 `ValueError: incomplete format` ⇒ 改为 `%%`。
+  - 缺省护栏：未传 --gates 时向 stderr 打一行警示（rc 仍为 0，供分维试算），
+    避免"最省事的调法"产出看起来正式的成绩却无任何运行期提示。
+  - 两处注释口径修正：v0.1.1 的「统一 75%」标注已被 FLOOR_RATIO 取代；取整方向措辞
+    由「同向保守」改为「方向相反、均偏保守」。
+
+退出码：0 正常；2 输入错误（缺键/未知键/重复键/类型错/越界/未知维度）。
 """
 import argparse
 import json
@@ -25,6 +42,7 @@ WEIGHTS = {
 }
 KEY_DIMS = ("R1", "R2", "R3", "R6")
 FLOOR_RATIO = {"R1": 0.60, "R2": 0.75, "R3": 0.75, "R6": 0.75}  # P1-1：按维比例。R1 用 0.60（default 底线 11/18）与 v0.2 四样本校准的绝对值一致，防止历史 S 级基准（85/S）漂移；R2/R3/R6 用 0.75 与校准值 12/16 一致
+# 取整方向（函数方向相反，但均偏保守、都不放宽）：C 级证据上限 = int(满分×0.60) 用 int() 截断（上限更低）；关键维度底线 = ceil(比例×满分) 用 math.ceil() 进位（底线更高）。
 EVIDENCE_CLAMP = 0.60       # P2-2：C 级证据该维最高 60%
 GATE_KEYS = ("M1", "M2", "M3", "M4", "M5")
 GATE_NAMES = {"M1": "M1 凭据裸露", "M2": "M2 高风险无守卫", "M3": "M3 注入即执行", "M4": "M4 可疑脚本", "M5": "M5 待审内容武器化"}
@@ -40,9 +58,20 @@ def floor_min(dim, maxv):
 
 
 def parse_gates(raw):
-    """P0-1：键齐全 + 布尔类型，不明确即拒绝。"""
+    """P0-1（v0.2.2：失败关闭）：缺键 / 未知键 / 重复键 / 非布尔，四类任一命中即拒绝。"""
+    dups = []
+
+    def _pairs_hook(pairs):
+        # 收集对象内的重复同名键（JSON 解析会静默取末值）
+        keys = []
+        for k, _v in pairs:
+            if k in keys:
+                dups.append(k)
+            keys.append(k)
+        return dict(pairs)
+
     try:
-        gates = json.loads(raw)
+        gates = json.loads(raw, object_pairs_hook=_pairs_hook)
     except json.JSONDecodeError as e:
         fail(f"gates JSON 解析失败: {e}")
     if not isinstance(gates, dict):
@@ -50,10 +79,15 @@ def parse_gates(raw):
     missing = [g for g in GATE_KEYS if g not in gates]
     if missing:
         fail(f"gates 缺键: {missing}（安全项必须显式声明，不提供请整体省略用默认全 false）")
+    unknown = sorted(set(gates) - set(GATE_KEYS))
+    if unknown:
+        fail(f"gates 未知键: {unknown}（疑似键名拼写错误；合法键为 M1–M5）")
+    if dups:
+        fail(f"gates 存在重复键: {sorted(set(dups))}（JSON 重复键会被静默取末值，可能吞掉一票否决）")
     bad = [g for g in gates if not isinstance(gates[g], bool)]
     if bad:
         fail(f"gates 值必须为布尔: {bad}（得到 {[gates[g] for g in bad]}）——不明确即拒绝")
-    return {g: gates.get(g, False) for g in GATE_KEYS}
+    return {g: gates[g] for g in GATE_KEYS}
 
 
 def parse_evidence(raw, w):
@@ -78,12 +112,12 @@ def parse_evidence(raw, w):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="agent-production-readiness 评分计算 v0.2.0")
+    ap = argparse.ArgumentParser(description="agent-production-readiness 评分计算 v0.2.3")
     ap.add_argument("--scores", required=True, help='JSON，如 {"R1":14,...,"R8":6}')
     ap.add_argument("--scenario", default="default", choices=["default", "A", "B"])
     ap.add_argument("--gates", default=None,
-                    help='JSON，四键齐全且全布尔；缺省视为全 false')
-    ap.add_argument("--evidence", default=None, help='JSON，如 {"R1":"A","R4":"C"}；C 级自动 clamp 60%')
+                    help='JSON，五键（M1–M5）齐全且全布尔；未知键 / 重复键 / 缺键 / 非布尔一律拒绝（rc=2）；整体省略 = 视为全 false（供分维试算，不得用于正式定级）')
+    ap.add_argument("--evidence", default=None, help='JSON，如 {"R1":"A","R4":"C"}；C 级自动 clamp 至该维满分 60%%')
     ap.add_argument("--json", action="store_true", help="JSON 输出（供 CI 集成）")
     args = ap.parse_args()
 
@@ -96,6 +130,9 @@ def main():
 
     w = WEIGHTS[args.scenario]
     gates = parse_gates(args.gates) if args.gates else {g: False for g in GATE_KEYS}
+    if not args.gates:
+        # v0.2.3 缺省护栏：省略 --gates 时给运行期警示（rc 仍 0，供分维试算）
+        print("⚠ 未声明门槛（未传 --gates）：本次按全 false 计算，结果不得用于正式定级", file=sys.stderr)
     clamps = parse_evidence(args.evidence, w)
 
     # P2-2：先应用 C 级 clamp，再校验范围
