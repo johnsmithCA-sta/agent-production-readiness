@@ -1,29 +1,29 @@
 {
   "schema": "agent-production-readiness/calibration_cases/v1",
-  "methodology_version": "v0.2.2",
+  "methodology_note": "评分体系演进统一记录于 references/Changelog.md",
   "generated": "2026-09-30",
-  "source": "references/04-calibration.md §四核心基准 · 双轨逐锚复核表（v0.2.2，2026-09-30）",
+  "source": "references/04-calibration.md §校准样本 · 逐维复核表",
   "scenario": "default",
   "scoring_rule": "baseline = round(max × achieved / achievable)；score = baseline + Σ anchors.delta；achievable = 适用检查项数（不适用项已剔除并在 excluded 列明）",
-  "corrected_in_v0_2_2": [
-    "skill-dev-kit/R2：score 13 → 16，总分 82 → 85（原 −3 锚前提不成立 + 沙箱项已作不适用剔除 ⇒ 扣分无依据）。定级仍 A（R1=9<11、R3=10<12 双压级）。除此以外全部数值照抄 04-calibration.md 现表。"
+  "corrections": [
+    "样本 A/R2：score 13 → 16，总分 82 → 85（原 −3 锚前提不成立 + 沙箱项已作不适用剔除 ⇒ 扣分无依据）。定级仍 A（R1=9<11、R3=10<12 双压级）。除此以外全部数值照抄 04-calibration.md 现表。"
   ],
   "summary": [
-    "原基线普遍虚高 1–9 分（P1-2 成立）；定级层面 law-fetch / knowledge-curation / fair-competition-review 维持 A，skill-dev-kit 与 ui-design-eval 由 S 降 A——降级共同原因是 R3「自审自验」锚（个人技能的 benchmark 都是自评，未换家族交叉验证）。",
-    "skill-dev-kit R2 于 v0.2.2 更正：13 → 16，总分 82 → 85（该对象有文件写与平台网络写，非「均为本地只读」，原 −3 锚前提不成立；且沙箱项已作不适用剔除 ⇒ 扣分无依据）。",
+    "原基线普遍虚高 1–9 分（P1-2 成立）；定级层面 样本 B / 样本 D / 样本 E 维持 A，样本 A 与 样本 C 由 S 降 A——降级共同原因是 R3「自审自验」锚（个人技能的 benchmark 都是自评，未换家族交叉验证）。",
+    "样本 A R2 更正：13 → 16，总分 82 → 85（该对象有文件写与平台网络写，非「均为本地只读」，原 −3 锚前提不成立；且沙箱项已作不适用剔除 ⇒ 扣分无依据）。",
     "S 阈值可达性已由 evals/benchmark.json 的合成样本验证（97 / 85 / 85 三例）；双轨制下真实对象仍全 A（个人维护、benchmark 自评未交叉验证），尚缺真实 S 对象标定。",
-    "图工程实战范例、平台托管型 Agent 家族（匿名）：维持印象级评分（未逐锚复核），在 benchmark 中已标注；点名版本仅存内部评审档案，不随包发布。",
-    "本表为 v0.2.2 前记录格式，未逐维标注证据级；历史样本证据级回填需重跑评审，列为待办（不猜测回填）。"
+    "图工程实战范例、平台托管型 Agent 家族（匿名）：维持印象级评分（未逐锚复核），在 benchmark 中已标注；含样本身份的版本仅存内部评审档案，不随包发布。",
+    "本表为早期记录格式，未逐维标注证据级；历史样本证据级回填需重跑评审，列为待办（不猜测回填）。"
   ],
   "cases": [
     {
-      "skill": "skill-dev-kit",
-      "review_claim": "双轨复核 85 · A（原基线 94 S，虚高 9 分；v0.2.2 更正 R2）",
-      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "skill": "样本 A",
+      "review_claim": "双轨复核 85 · A（原基线 94 S，虚高 9 分；R2 已更正）",
+      "evidence_levels": "未逐维记录（本表为早期记录格式）",
       "expect": { "total": 85, "grade": "A", "floor_fail": ["R1", "R3"] },
       "dims": {
         "R1": { "max": 18, "achievable": 4, "achieved": 2, "anchors": [], "excluded": ["子任务隔离"], "score": 9, "basis": "压缩/卸载无声明；子任务隔离不适用剔除" },
-        "R2": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["沙箱"], "score": 16, "basis": "[不可逆]+确认=ask 等价；资金路径降级表", "corrected": "v0.2.2：原记 13 的 −3 锚前提不成立（该对象有文件写与平台网络写，非'均为本地只读'），且沙箱项已作不适用剔除 ⇒ 扣分无依据" },
+        "R2": { "max": 16, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["沙箱"], "score": 16, "basis": "[不可逆]+确认=ask 等价；资金路径降级表", "corrected": "原记 13 的 −3 锚前提不成立（该对象有文件写与平台网络写，非'均为本地只读'），且沙箱项已作不适用剔除 ⇒ 扣分无依据" },
         "R3": { "max": 16, "achievable": 5, "achieved": 4, "anchors": [{ "label": "自审", "delta": -3 }], "excluded": [], "score": 10, "basis": "evals/触发评估/错误路径/回流齐；换家族未达成" },
         "R4": { "max": 10, "achievable": 4, "achieved": 4, "anchors": [], "excluded": ["并行"], "score": 10, "basis": "跨会话接续/落盘纪律/并行不适用剔除×1" },
         "R5": { "max": 10, "achievable": 3, "achieved": 3, "anchors": [], "excluded": [], "score": 10, "basis": "" },
@@ -33,9 +33,9 @@
       }
     },
     {
-      "skill": "law-fetch",
+      "skill": "样本 B",
       "review_claim": "双轨复核 87 · A（原基线 86 A，定级不变）",
-      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "evidence_levels": "未逐维记录（本表为早期记录格式）",
       "expect": { "total": 87, "grade": "A", "floor_fail": ["R3"] },
       "dims": {
         "R1": { "max": 18, "achievable": 4, "achieved": 3, "anchors": [], "excluded": [], "score": 14, "basis": "工具输出落盘=卸载达成；压缩无" },
@@ -49,9 +49,9 @@
       }
     },
     {
-      "skill": "ui-design-eval",
+      "skill": "样本 C",
       "review_claim": "双轨复核 90 · A（原基线 85 S）",
-      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "evidence_levels": "未逐维记录（本表为早期记录格式）",
       "expect": { "total": 90, "grade": "A", "floor_fail": ["R3"] },
       "dims": {
         "R1": { "max": 18, "achievable": 4, "achieved": 3, "anchors": [], "excluded": [], "score": 14, "basis": "素材落盘=卸载；压缩无声明" },
@@ -65,9 +65,9 @@
       }
     },
     {
-      "skill": "knowledge-curation",
+      "skill": "样本 D",
       "review_claim": "双轨复核 85 · A（原基线 81 A）",
-      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "evidence_levels": "未逐维记录（本表为早期记录格式）",
       "expect": { "total": 85, "grade": "A", "floor_fail": ["R1"] },
       "dims": {
         "R1": { "max": 18, "achievable": 4, "achieved": 2, "anchors": [], "excluded": [], "score": 9, "basis": "保守方向=预算意识 B；压缩/卸载无" },
@@ -81,9 +81,9 @@
       }
     },
     {
-      "skill": "fair-competition-review",
+      "skill": "样本 E",
       "review_claim": "双轨复核 78 · A（原基线 79 A）；原表以单行式记录（非逐维表格）",
-      "evidence_levels": "未逐维记录（本表为 v0.2.2 前记录格式）",
+      "evidence_levels": "未逐维记录（本表为早期记录格式）",
       "expect": { "total": 78, "grade": "A", "floor_fail": ["R1", "R3"] },
       "dims": {
         "R1": { "max": 18, "achievable": 4, "achieved": 2, "anchors": [], "excluded": [], "score": 9, "basis": "1/4→保守方向算预算意识则 2/4" },

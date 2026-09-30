@@ -112,7 +112,7 @@ def parse_evidence(raw, w):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="agent-production-readiness 评分计算 v0.2.3")
+    ap = argparse.ArgumentParser(description="agent-production-readiness 评分计算 v0.2.6")
     ap.add_argument("--scores", required=True, help='JSON，如 {"R1":14,...,"R8":6}')
     ap.add_argument("--scenario", default="default", choices=["default", "A", "B"])
     ap.add_argument("--gates", default=None,

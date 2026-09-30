@@ -48,7 +48,7 @@ def run_case(case):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="agent-production-readiness 基准回归 v0.2.3")
+    ap = argparse.ArgumentParser(description="agent-production-readiness 基准回归 v0.2.6")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 

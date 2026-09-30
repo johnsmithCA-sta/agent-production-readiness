@@ -57,8 +57,8 @@
       "note": "多 Agent 编排型 S 级参照"
     },
     {
-      "id": "B2-ui-design-eval",
-      "name": "ui-design-eval v2.4.0",
+      "id": "B2-single-agent-tool",
+      "name": "单 Agent 工具型参照（样本 C 形态）",
       "scenario": "default",
       "scores": {
         "R1": 14,
@@ -84,8 +84,8 @@
       "note": "单 Agent 工具型 S 级参照"
     },
     {
-      "id": "B3-fair-competition",
-      "name": "fair-competition-review v1.2.0",
+      "id": "B3-mid-sample",
+      "name": "中位样本参照（样本 E 形态）",
       "scenario": "default",
       "scores": {
         "R1": 13,
@@ -351,7 +351,7 @@
     },
     {
       "id": "G6-gates-unknown-key",
-      "name": "防御回归：gates 含未知键必须被拒（P0，v0.2.2）",
+      "name": "防御回归：gates 含未知键必须被拒",
       "scenario": "default",
       "scores": {
         "R1": 14,
@@ -374,7 +374,7 @@
       "expect": {
         "exit": 2
       },
-      "note": "v0.2.2 P0 回归：未知键必须被拒（P0，v0.2.2）——键名写错（如 M5 误写为 M6）时原被 gates.get() 静默丢弃，100 分被误判为 S 级；现在必须报错退出码 2"
+      "note": "防御回归：未知键必须被拒——键名写错（如 M5 误写为 M6）时原被 gates.get() 静默丢弃，100 分被误判为 S 级；现在必须报错退出码 2"
     }
   ]
 }

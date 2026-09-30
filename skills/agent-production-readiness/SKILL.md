@@ -4,7 +4,7 @@ slug: agent-production-readiness
 displayName: Agent 生产准备度评审（PRR）
 summary: 面向 AI Agent 的 Production Readiness Review（生产准备度评审）：八维评分 + 门槛扫描(M1–M5) + 双场景权重 + 证据等级，静态评审 Agent/Skill 的 Harness 运行时就绪度——只判"敢不敢上生产"，不评"写得好不好"。
 description: 面向 AI Agent 的 Production Readiness Review（PRR，生产准备度评审）。当用户要"评审一个 Agent 或 Skill 能不能上生产、生产准备度评审、上线评审、上线前把关、上线体检、PRR、go-live readiness、production readiness review、发布前评审、harness 评审、运行时可靠性评审"，或问"我的 Agent 敢不敢上线、这个技能生产就绪吗"时使用。评审对象是 Harness 运行时工程（上下文管理/工具权限/评估闭环/状态持久化/可观测/安全风控/成本治理/可维护性），输出生产准备度评分(S/A/B/C/D) + 风险清单 + 修复路径。范式锚定 Google SRE 的 PRR（分级门禁 A/B/C 与 SRE 惯例同构）。不适用于：SKILL.md 文档质量审查（另有 skill-reviewer 类技能）、运行时性能评测（需接 trace 的平台）、单 Agent 提示词调优、组织/周边系统的 agent 采用度评估（"agent readiness"的另一语义）。
-version: 0.2.3
+version: 0.2.6
 license: MIT
 author: johnsmithCA-sta
 homepage: https://github.com/johnsmithCA-sta/agent-production-readiness
@@ -15,7 +15,7 @@ agent_created: true
 # Agent 生产准备度评审（PRR）
 
 量化评审 Agent/Skill 的 **Harness 运行时就绪度**——**只判"敢不敢上生产"，不评"写得好不好"**。
-理论底座：《Harness Engineering 深度研究》（Agent = Model + Harness）；方法论：**八维评分 + 门槛扫描(M1–M5) + 双场景权重 + 证据等级(A/B/C)**，经四样本校准（v0.2，见 `references/04-calibration.md`）。
+理论底座：《Harness Engineering 深度研究》（Agent = Model + Harness）；方法论：**八维评分 + 门槛扫描(M1–M5) + 双场景权重 + 证据等级(A/B/C)**，经多样本校准（见 `references/04-calibration.md`）。
 
 > **防误读**：本技能不审 SKILL.md 的措辞、触发词、description 质量、渐进披露——那是 skill-reviewer 类竞品的领域。我们审的是"上线会不会出事"的运行时工程。
 
@@ -96,7 +96,8 @@ python3 scripts/score.py --scores '{"R1":14,"R2":13,"R3":15,"R4":8,"R5":9,"R6":1
 | `references/01-rubric.md` | 八维细则 / 底线规则（逐维检查项、扣分锚、典型证据口径） |
 | `references/02-gates.md` | 门槛扫描细则（M1–M5） |
 | `references/03-report-template.md` | 报告模板（结论 / 八维表 / 风险清单 / 修复路径） |
-| `references/04-calibration.md` | 校准记录与 Changelog（含方法论版本史） |
+| `references/04-calibration.md` | 校准样本与逐维复核表 |
+| `references/Changelog.md` | 版本发布说明 |
 | `references/05-boundary.md` | 边界与竞品分工对照 |
 | `references/06-cross-harness-eval.md` | 跨 harness 评测指南 |
 | `scripts/score.py` | 评分计算（可执行，零依赖） |
@@ -128,4 +129,4 @@ python3 scripts/score.py --scores '{"R1":14,"R2":13,"R3":15,"R4":8,"R5":9,"R6":1
 
 ---
 
-*版本：v0.2.3（2026-09-30）· 方法论版本见 references/04-calibration.md · Changelog 见同文件*
+*版本：v0.2.6（2026-09-30）· 版本发布说明见 references/Changelog.md*
